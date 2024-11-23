@@ -19,6 +19,12 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
+from django.http import HttpResponse
+def home_page(request):
+    return HttpResponse('<h1>Hello</h1>')
+
+
 urlpatterns = [
+    path('', home_page),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
