@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u0v=2_47xxi#%gvg34^w*l3vm@)sk*c*8fg5=g25p6q5u9+#tw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['zatha.in']
 
 
 # Application definition
