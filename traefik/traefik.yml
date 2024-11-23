@@ -17,3 +17,16 @@ providers:
   file:
     filename: /etc/traefik/dynamic_config.yml
     watch: true
+
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        customRequestHeaders:
+          X-Forwarded-Proto: https

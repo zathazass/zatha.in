@@ -128,3 +128,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SESSION_COOKIE_SECURE = True  # Ensures cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are sent over HTTPS only
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust proxy headers
+CSRF_TRUSTED_ORIGINS = [
+    'https://zatha.in',  # Replace with your domain
+]
+
