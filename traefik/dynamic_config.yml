@@ -1,7 +1,7 @@
 http:
   routers:
     django:
-      rule: "Host(`zatha.in`) || Host(`www.zatha.in`)"
+      rule: "Host(`zatha.in`)"
       entryPoints:
         - websecure
       service: django
