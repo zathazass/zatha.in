@@ -18,6 +18,8 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+    networks:
+      - web
   
   django:
     build:
