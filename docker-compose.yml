@@ -31,6 +31,9 @@ services:
       - DJANGO_SETTINGS_MODULE=zatha.settings
     volumes:
       - .:/app
+    deploy:
+      mode: replicated
+      replicas: 3
     depends_on:
       - db
     networks:
