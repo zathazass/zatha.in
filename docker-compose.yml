@@ -49,6 +49,22 @@ services:
     networks:
       - web
 
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Link your custom Nginx configuration file
+      - ./staticfiles:/app/staticfiles       # Ensure static files are mapped correctly
+    depends_on:
+      - django
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`zatha.in`)"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"  # Nginx serves on port 80
+
 volumes:
   postgres_data:
 
