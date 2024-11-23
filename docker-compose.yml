@@ -19,7 +19,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=satha.emedhub@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.email=info@zatha.in"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
   
   django:

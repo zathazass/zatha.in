@@ -4,7 +4,17 @@ entryPoints:
   websecure:
     address: ":443"
 
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "info@zatha.in"
+      storage: "/letsencrypt/acme.json"
+      tlsChallenge: {}
+
 providers:
+  docker:
+    exposedByDefault: false
   file:
     filename: /etc/traefik/dynamic_config.yml
     watch: true
+x
