@@ -1,0 +1,25 @@
+http:
+  routers:
+    django:
+      rule: "Host(`zatha.in`) || Host(`www.zatha.in`)"
+      entryPoints:
+        - websecure
+      service: django
+      tls:
+        certResolver: myresolver
+
+  services:
+    django:
+      loadBalancer:
+        servers:
+          - url: "http://django:8000"
+
+  middlewares:
+    secure-headers:
+      headers:
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000

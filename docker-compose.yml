@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/traefik/acme.json:/letsencrypt/acme.json
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic_config.yml:/etc/traefik/dynamic_config.yml
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=satha.emedhub@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+  
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django
+    restart: unless-stopped
+    environment:
+      - DJANGO_SETTINGS_MODULE=zatha.settings
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - web
+
+  db:
+    image: postgres:15
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zatha
+      POSTGRES_PASSWORD: zass2455
+      POSTGRES_DB: zathadotin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+volumes:
+  postgres_data:
+
+networks:
+  web:
