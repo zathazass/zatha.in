@@ -25,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: django
+    container_name: django-prod
     restart: unless-stopped
     environment:
       - DJANGO_SETTINGS_MODULE=zatha.settings
@@ -65,14 +65,14 @@ services:
       - "traefik.http.routers.nginx.rule=Host(`zatha.in`)"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"  # Nginx serves on port 80
 
-  watchtower:  # Watchtower Service
-    image: containrrr/watchtower:latest
-    container_name: watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Required for Watchtower to access Docker
-    environment:
-      - WATCHTOWER_POLL_INTERVAL=30  # Check for updates every 30 seconds
+  # watchtower:  # Watchtower Service
+  #   image: containrrr/watchtower:latest
+  #   container_name: watchtower
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock  # Required for Watchtower to access Docker
+  #   environment:
+  #     - WATCHTOWER_POLL_INTERVAL=30  # Check for updates every 30 seconds
       # - WATCHTOWER_NOTIFICATIONS=email  # You can add notifications, if needed
       # - WATCHTOWER_NOTIFICATION_EMAIL_FROM=info@zatha.in
       # - WATCHTOWER_NOTIFICATION_EMAIL_TO=sath.emedhub@gmail.com
@@ -80,12 +80,12 @@ services:
       # - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=587
       # - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=info@zatha.in
       # - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=wrongpassword
-    networks:
-      - web
+    # networks:
+    #   - web
 
 volumes:
   postgres_data:
 
 networks:
   web:
-    driver: bridge
+    # driver: bridge
