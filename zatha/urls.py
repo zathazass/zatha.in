@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 from django.http import HttpResponse
 def home_page(request):
-    return HttpResponse('<h1>Irung Boy ... CD Ok boy</h1>')
+    return HttpResponse('<h1>Irung Boy ...</h1>')
 
 
 urlpatterns = [
