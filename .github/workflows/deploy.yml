@@ -27,7 +27,6 @@ jobs:
 
             if [ -d "/home/ubuntu/zatha.in" ]; then
               echo "Repository folder exists, pulling the branch."
-              git pull
             else
               echo "Repository folder does not exist, cloning the repository."
               git clone https://github.com/zathazass/zatha.in.git /home/ubuntu/zatha.in
@@ -35,6 +34,9 @@ jobs:
 
             # Navigate to the project directory
             cd /home/ubuntu/zatha.in
+
+            # Pulling the latest changes
+            git pull
 
             # Build and start the containers using Docker Compose (direct from code)
             sudo docker compose down  # Stop and remove existing containers (if any)
