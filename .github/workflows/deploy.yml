@@ -5,30 +5,40 @@ on:
     branches: [ main ]
 
 jobs:
-  build_and_publish:
+  deploy_to_ec2:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code-repository
-        uses: actions/checkout@v3
-      
-      - name: Configure AWS credentials from Test account
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Set up SSH key for EC2
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Login to AWS ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: 'true'
-
-      - name: Build and push image to ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: zatha-in
-          IMAGE_TAG: latest
+      - name: SSH into EC2 and deploy
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          ssh -o StrictHostKeyChecking=no ubuntu@13.127.138.53 << 'EOF'
+            # Install Docker and Docker Compose (if not already installed)
+            # sudo apt-get update
+            # sudo apt-get install -y docker.io curl git
+
+            # Install Docker Compose (if not already installed)
+            # sudo curl -SL https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-linux-$(uname -m) -o /usr/local/lib/docker/compose
+            # sudo chmod +x /usr/local/lib/docker/compose
+            # sudo ln -s /usr/local/lib/docker/compose /usr/bin/docker-compose
+
+            if [ -d "/home/ubuntu/zatha.in" ]; then
+              echo "Repository folder exists, navigating to it."
+            else
+              echo "Repository folder does not exist, cloning the repository."
+              git clone https://github.com/zathazass/zatha.in.git /home/ubuntu/zatha.in
+            fi
+
+            # Navigate to the project directory
+            cd /home/ubuntu/zatha.in
+
+            # Build and start the containers using Docker Compose (direct from code)
+            sudo docker-compose down  # Stop and remove existing containers (if any)
+            sudo docker-compose up -d  # Build and start containers in detached mode
+
+            # Optionally, remove old/dangling images to free space
+            sudo docker image prune -f
+          EOF
